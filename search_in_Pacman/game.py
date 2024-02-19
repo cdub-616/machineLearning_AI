@@ -504,11 +504,11 @@ class GameStateData:
             self.agentStates.append( AgentState( Configuration( pos, Directions.STOP), isPacman) )
         self._eaten = [False for a in self.agentStates]
 
-try:
-    import boinc
-    _BOINC_ENABLED = True
-except:
-    _BOINC_ENABLED = False
+#try:
+#    import boinc
+#    _BOINC_ENABLED = True
+#except:
+_BOINC_ENABLED = False
 
 class Game:
     """
