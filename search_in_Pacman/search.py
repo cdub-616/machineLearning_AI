@@ -87,33 +87,68 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    fringe = util.Stack()
-    visited = set()
-    actions = []
+    fringe = util.Stack()                                 # use stack for DFS
+    visited = set()                                       # keep track of visited nodes
+    actions = []                                          # list of actions
     start_state = problem.getStartState()
-    fringe.push((start_state, actions))  # push starting state and actions to fringe
+    fringe.push((start_state, actions))                   # push starting state and actions to fringe
 
     while not fringe.isEmpty():
-        current_state, current_path = fringe.pop() # parent node
-        if current_state not in visited: # pass through if already visited
+        current_state, current_path = fringe.pop()        # parent node
+        if current_state not in visited:                  # pass through if already visited
             visited.add(current_state)
             if problem.isGoalState(current_state):
-                return current_path  # return current path if goal is reached
+                return current_path
             else:
                 children = problem.getSuccessors(current_state)
-                for next_state, action, _ in children: 
-                    next_path = current_path + [action]  # update actions for child node
-                    fringe.push((next_state, next_path)) # push child nodes onto fringe
+                for next_state, action, _ in children:
+                    next_path = current_path + [action]   # update actions for child node
+                    fringe.push((next_state, next_path))  # push child node onto fringe
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    fringe = util.Queue()                                 # use queue for BFS
+    visited = set()                                       # keep track of visited nodes
+    actions = []                                          # list of actions
+    start_state = problem.getStartState()
+    fringe.push((start_state, actions))                   # push starting state and actions to fringe
+
+    while not fringe.isEmpty():
+        current_state, current_path = fringe.pop()        # parent node
+        if current_state not in visited:                  # pass through if already visited
+            visited.add(current_state)
+            if problem.isGoalState(current_state):
+                return current_path
+            else:
+                children = problem.getSuccessors(current_state)
+                for next_state, action, _ in children:
+                    next_path = current_path + [action]   # update actions for child node
+                    fringe.push((next_state, next_path))  # push child node onto fringe
     util.raiseNotDefined()
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    fringe = util.PriorityQueue()                                               # use priority queue for UCS
+    visited = set()                                                             # keep track of visited nodes
+    actions = []                                                                # list of actions
+    start_state = problem.getStartState()
+    cost = 0                                                                    # initial cost
+    fringe.push((start_state, actions, cost), cost)
+    while not fringe.isEmpty():
+        current_state, current_path, current_cost = fringe.pop()                # parent node
+        if current_state not in visited:                                        # pass through if already visited
+            visited.add(current_state)
+            if problem.isGoalState(current_state):
+                return current_path
+            else:
+                children = problem.getSuccessors(current_state)
+                for next_state, action, cost in children:
+                    next_path = current_path + [action]                         # update actions for child node
+                    next_cost = current_cost + cost                             # update cost for child node
+                    fringe.push((next_state, next_path, next_cost), next_cost)  # push child node onto fringe
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -126,6 +161,28 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    fringe = util.PriorityQueue()                                                                     # use priority queue for A* search
+    visited = set()                                                                                   # keep track of visited nodes 
+    actions = []                                                                                      # list of actions
+    start_state = problem.getStartState()
+    cost = 0                                                                                          # initial cost
+    heuristic_cost = heuristic(start_state, problem)                                                  # initial heuristic cost
+    fringe.push((start_state, actions, cost), cost + heuristic_cost)
+
+    while not fringe.isEmpty():
+        current_state, current_path, current_cost = fringe.pop()                                      # parent node
+        if current_state not in visited:                                                              # pass through if already visited
+            visited.add(current_state)
+            if problem.isGoalState(current_state):
+                return current_path
+            else:
+                children = problem.getSuccessors(current_state)
+                for next_state, action, cost in children:
+                    next_path = current_path + [action]                                               # update actions for child node
+                    next_cost = current_cost + cost                                                   # update cost for child node
+                    next_heuristic_cost = heuristic(next_state, problem)                              # update heuristic cost for child node
+                    fringe.push((next_state, next_path, next_cost), next_cost + next_heuristic_cost)  # push child node onto fringe
+
     util.raiseNotDefined()
 
 
