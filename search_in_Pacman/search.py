@@ -91,19 +91,19 @@ def depthFirstSearch(problem: SearchProblem):
     visited = set()
     actions = []
     start_state = problem.getStartState()
-    fringe.push((start_state, actions))  #push state and actions to stack
+    fringe.push((start_state, actions))  # push starting state and actions to fringe
 
     while not fringe.isEmpty():
-        current_state, current_path = fringe.pop()
-        if current_state not in visited:
+        current_state, current_path = fringe.pop() # parent node
+        if current_state not in visited: # pass through if already visited
             visited.add(current_state)
             if problem.isGoalState(current_state):
-                return current_path  #return current path if goal is reached
+                return current_path  # return current path if goal is reached
             else:
                 children = problem.getSuccessors(current_state)
-                for next_state, action, _ in children:
-                    next_path = current_path + [action]  #update actions
-                    fringe.push((next_state, next_path))
+                for next_state, action, _ in children: 
+                    next_path = current_path + [action]  # update actions for child node
+                    fringe.push((next_state, next_path)) # push child nodes onto fringe
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem: SearchProblem):
